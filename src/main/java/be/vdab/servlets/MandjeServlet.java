@@ -2,7 +2,6 @@ package be.vdab.servlets;
 
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
@@ -20,7 +19,7 @@ import be.vdab.services.FilmService;
  * Servlet implementation class FilmBestellenServlet
  */
 @WebServlet("/reservaties/filmbestellen.htm")
-public class FilmBestellenServlet extends HttpServlet {
+public class MandjeServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private static final String VIEW = "/WEB-INF/JSP/filmbestellen.jsp";
 	private static final transient FilmService filmService = new FilmService();
@@ -33,10 +32,8 @@ public class FilmBestellenServlet extends HttpServlet {
 		if (session != null) {
 			@SuppressWarnings("unchecked")
 			Set<Integer> mandje = (Set<Integer>) session.getAttribute(MANDJE);
-			if (!mandje.isEmpty()) {
-
-				List<Film> filmsInMandje = new LinkedList<>();
-				filmsInMandje = filmService.findFilmTitlesInMandje(mandje);
+			if (!mandje.isEmpty()) {				
+				List<Film> filmsInMandje = filmService.findFilmTitlesInMandje(mandje);
 				request.setAttribute("filmsInMandje", filmsInMandje
 						);
 				

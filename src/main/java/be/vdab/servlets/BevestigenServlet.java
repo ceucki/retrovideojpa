@@ -27,18 +27,18 @@ public class BevestigenServlet extends HttpServlet {
 	private static final String REDIRECT_URL = "%s/rapport.htm";
 	private static final transient FilmService filmService = new FilmService();
 	private static final transient KlantService klantService = new KlantService();
-	private static final String RESERVATIERAPPORT = "gelukteMislukteReservaties";	
-	
+	private static final String RESERVATIERAPPORT = "gelukteMislukteReservaties";
+
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 		if (request.getQueryString() != null) {
 			int id = Integer.parseInt(request.getParameter("id"));
-			request.setAttribute("klant", klantService.read(id));			
+			request.setAttribute("klant", klantService.read(id));
 		}
 		HttpSession session = request.getSession(false);
 		if (session != null) {
 			@SuppressWarnings("unchecked")
-			Set<String> mandje = (Set<String>) session.getAttribute(MANDJE);			
+			Set<String> mandje = (Set<String>) session.getAttribute(MANDJE);
 			request.setAttribute("mandje", mandje);
 			request.setAttribute("aantalFilms", mandje.size());
 		}
@@ -50,24 +50,20 @@ public class BevestigenServlet extends HttpServlet {
 		HttpSession session = request.getSession();
 		if (session != null) {
 			@SuppressWarnings("unchecked")
-			Set<Integer> mandje = (Set<Integer>) session.getAttribute(MANDJE);			
+			Set<Integer> mandje = (Set<Integer>) session.getAttribute(MANDJE);
 			Map<String, Film> gelukteMislukteReservaties = new HashMap<>();
 			for (int idFilm : mandje) {
-				Boolean geluktMislukt = filmService.reserveren(idFilm, Integer.parseInt(request.getParameter("id")));
-				if (geluktMislukt){
-					gelukteMislukteReservaties.put("gelukt", filmService.read(idFilm));
-				}else {
-					gelukteMislukteReservaties.put("mislukt", filmService.read(idFilm));
-				}			
-				
-			}			
-			
-			session.setAttribute(RESERVATIERAPPORT,
-					gelukteMislukteReservaties);
+				boolean geluktMislukt = filmService.reserveren(idFilm,
+						Integer.parseInt(request.getParameter("id")));
+				gelukteMislukteReservaties.put((geluktMislukt ? "gelukt"
+						: "mislukt"), filmService.read(idFilm));
+				session.setAttribute(RESERVATIERAPPORT,
+						gelukteMislukteReservaties);
 
+			}
+			response.sendRedirect(String.format(REDIRECT_URL,
+					request.getContextPath()));
 		}
-		response.sendRedirect(String.format(REDIRECT_URL,	
-				request.getContextPath()));
-	}
 
+	}
 }

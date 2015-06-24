@@ -41,23 +41,5 @@ public class Genre implements Serializable{
 	
 	public Set<Film>getFilms(){
 		return Collections.unmodifiableSet(films);
-	}
-	
-	public Film addFilm(Film film){
-		getFilms().add(film);
-		if(film.getGenre() !=this){
-			film.setGenre(this);
-		}
-		return film;
-	}
-	
-	public Film removeFilm(Film film){
-		getFilms().remove(film);
-		if(film.getGenre()==this){
-			film.setGenre(null);
-		}
-		return film;
-	}
-	
-	
+	}			
 }

@@ -22,19 +22,20 @@ public class FilmService {
 		return filmDAO.findFilmTitlesInMandje(mandje);
 	}
 
-	public Boolean reserveren(int filmId, int klantId) {
-		Boolean geluktMislukt = false;
+	public boolean reserveren(int filmId, int klantId) {  
+		boolean geluktMislukt = false;  
 		filmDAO.beginTransaction();
-		Film film = filmDAO.read(filmId);
-		String gelukt = film.reserveren();
-		Reservatie reservatie = new Reservatie(klantDAO.read(klantId), new Date());
-		film.addReservatie(reservatie);	
-		if (gelukt.equals("gelukt") && film.getReservaties().contains(reservatie)){			
-			geluktMislukt = true;
-		} else {
-		geluktMislukt = false;	
-		}				
-		filmDAO.commit();		
+		Film film = filmDAO.readWithLock(filmId);
+		boolean gelukt = film.reserveren();
+		if (gelukt) {
+			Reservatie reservatie = new Reservatie(klantDAO.read(klantId),
+					new Date());
+			film.addReservatie(reservatie);
+			if (film.getReservaties().contains(reservatie)) {
+				geluktMislukt = true;
+			}
+			filmDAO.commit();
+		}		
 		return geluktMislukt;
 	}
 

@@ -1,12 +1,12 @@
 <%-- Een welkom pagina --%>
-<%@page contentType='text/html' pageEncoding='UTF-8' session='false'
+<%@page contentType='text/html' pageEncoding='UTF-8'
 	trimDirectiveWhitespaces='true'%>
 <%@taglib prefix='c' uri='http://java.sun.com/jsp/jstl/core'%>
 
 <!DOCTYPE html>
 <html lang='nl'>
 <head>
-<link rel='stylesheet' href='styles/default.css'>
+<link rel='stylesheet' href='<c:url value="/styles/default.css"/>'>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Retrovideo</title>
 </head>
@@ -14,10 +14,28 @@
 	<h1>Reservaties</h1>
 	<nav>
 		<c:forEach var="genre" items="${genres}">
-			<li><c:url value='/reservaties/films.htm' var='detailURL'>
+			<li><c:url value='/index.htm' var='detailURL'>
 					<c:param name='id' value="${genre.id}" />
 				</c:url><a href="<c:out value='${detailURL}'/>">${genre.naam}</a></li>
 		</c:forEach>
 	</nav>
+
+
+	<c:forEach var="film" items="${genre.films}">
+		<li><c:url value='/reservaties/reserveren.htm' var='detailURL'>
+				<c:param name='id' value="${film.id}" />
+			</c:url><a href="<c:out value='${detailURL}'/>"> <c:choose>
+					<c:when test="${film.beschikbaar==0}">
+						<img src=" <c:url value="/images/${film.id}.jpg"/>"
+							title="${film.titel}&nbsp; Reserveren niet mogelijk"
+							alt="${film.titel}">
+					</c:when>
+					<c:otherwise>
+						<img src=<c:url value="/images/${film.id}.jpg"/>
+							title="${film.titel}&nbsp; Reserveren mogelijk">
+					</c:otherwise>
+				</c:choose>
+		</a></li>
+	</c:forEach>
 </body>
 </html>

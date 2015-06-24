@@ -14,7 +14,7 @@ import be.vdab.services.GenreService;
  * Servlet implementation class ReservatiesServlet
  */
 @WebServlet("/index.htm")
-public class ReservatiesServlet extends HttpServlet {
+public class IndexServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private static final String VIEW = "/WEB-INF/JSP/index.jsp";
 	private static final transient GenreService genreService = new GenreService();
@@ -23,6 +23,9 @@ public class ReservatiesServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 		request.setAttribute("genres", genreService.findAll());
+		if (request.getQueryString() !=null){
+			request.setAttribute("genre", genreService.read((Integer.parseInt(request.getParameter("id")))));
+		}		
 		request.getRequestDispatcher(VIEW).forward(request, response);
 	}
 	

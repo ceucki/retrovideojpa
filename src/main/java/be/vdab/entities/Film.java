@@ -96,17 +96,7 @@ public class Film implements Serializable {
 	public Genre getGenre() {
 		return genre;
 	}
-
-	public void setGenre(Genre genre) {
-		if (this.genre != null && this.genre.getFilms().contains(this)) {
-			this.genre.removeFilm(this);
-		}
-		this.genre = genre;
-		if (genre != null && !genre.getFilms().contains(this)) {
-			genre.addFilm(this);
-		}
-	}
-
+	
 	@Override
 	public boolean equals(Object obj) {
 		if (!(obj instanceof Film)) {
@@ -121,13 +111,13 @@ public class Film implements Serializable {
 		return titel.toUpperCase().hashCode();
 	}
 
-	public String reserveren() {
+	public boolean reserveren() {  
 
 		if (getBeschikbaar() > 0) {
 			gereserveerd++;
-			return "gelukt";
+			return true;
 		} else {
-			return "mislukt";
+			return false;
 		}
 		
 	}
