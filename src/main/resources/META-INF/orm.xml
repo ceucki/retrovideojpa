@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<entity-mappings xmlns="http://xmlns.jcp.org/xml/ns/persistence/orm"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence/orm
+http://xmlns.jcp.org/xml/ns/persistence/orm_2_1.xsd"
+	version="2.1">
+	<named-query name="Genre.findAll">
+		<query>select d from Genre d order by d.naam</query>
+	</named-query>
+
+	<named-query name="Film.findFilmTitlesInMandje">
+		<query>select d from Film d where d.id in(:filmids) order by d.titel</query>
+	</named-query>
+
+	<named-query name="Klant.findKlant">
+		<query>select d from Klant d where d.familienaam like(:naam)</query>
+	</named-query>	
+	
+</entity-mappings>
